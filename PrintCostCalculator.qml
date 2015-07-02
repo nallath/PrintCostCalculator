@@ -19,12 +19,30 @@ UM.Dialog
     {
         anchors.fill: parent;
 
-        TextField 
+        Text
         { 
-            text: manager.materialAmount
+            text: manager.materialAmount == -1 ? 0 : manager.materialAmount
+            onTextChanged: 
+            {
+                price_text.text = "Price: " + manager.materialAmount * cost_field.text
+            }
         }
         TextField 
-        { }
+        { 
+            id: cost_field
+            text: "12"
+            onAccepted: 
+            {
+                price_text.text = "Price: " + manager.materialAmount * cost_field.text
+            }
+        }
+        
+        Text
+        {
+            id: price_text
+            text: "Price:"
+        }
+ 
         Button
         {
             
@@ -35,6 +53,5 @@ UM.Dialog
                 base.visible = false;
             }
         }
-        
     }
 }
