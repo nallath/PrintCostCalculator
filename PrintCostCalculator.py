@@ -1,4 +1,4 @@
-from PyQt5.QtCore import  QObject, QUrl
+from PyQt5.QtCore import  QObject, QUrl, pyqtProperty, pyqtSignal
 from UM.Extension import Extension
 from UM.PluginRegistry import PluginRegistry
 import os.path
@@ -15,7 +15,19 @@ class PrintCostCalculator(QObject,  Extension):
         super().__init__(parent)
         self._cost_view = None
         self.addMenuItem(i18n_catalog.i18n("Calculate"), self.showPopup)
-        
+        Application.getInstance().activeMachineChanged.connect(self._onActiveMachineChanged)
+        self._print_information = None
+    
+    materialAmountChanged = pyqtSignal()
+    
+    def _onActiveMachineChanged(self):
+        self._print_information = Application.getInstance()._print_information  #Yes, this is bad. Theres no getter/setter :(
+        self._print_information.materialAmountChanged.connect(self.materialAmountChanged)
+
+    @pyqtProperty(float, notify = materialAmountChanged)
+    def materialAmount(self):
+        return self._print_information.materialAmount
+    
     def showPopup(self):
         if self._cost_view is None:
             path = QUrl.fromLocalFile(os.path.join(PluginRegistry.getInstance().getPluginPath("PrintCostCalculator"), "PrintCostCalculator.qml"))

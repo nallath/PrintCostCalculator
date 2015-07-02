@@ -14,14 +14,15 @@ UM.Dialog
     height: 100 * Screen.devicePixelRatio;
     visible: true;
     title:  qsTr("Calculate print cost")
-    modality: Qt.ApplicationModal;
    
     Column
     {
         anchors.fill: parent;
 
         TextField 
-        { }
+        { 
+            text: manager.materialAmount
+        }
         TextField 
         { }
         Button
@@ -32,7 +33,6 @@ UM.Dialog
             onClicked: 
             {
                 base.visible = false;
-                console.log("clicked")
             }
         }
         
