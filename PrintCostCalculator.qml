@@ -59,12 +59,12 @@ UM.Dialog
         }
         Text
         {
-            text: "Weight of print " + kg_material + " kg"
+            text: "Weight of print " + Math.round(kg_material * 100 ) / 100 + " kg"
         }
         
         Text
         {
-            text: "Print cost: " + price_per_kg * kg_material
+            text: "Print cost: " +  Math.round(price_per_kg * kg_material * 100) / 100
         }
         
  
