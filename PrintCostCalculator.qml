@@ -10,38 +10,63 @@ import UM 1.0 as UM
 UM.Dialog
 {
     id: base;
-    width: 500 * Screen.devicePixelRatio;
-    height: 100 * Screen.devicePixelRatio;
+    width: 250 * Screen.devicePixelRatio;
+    height: 110 * Screen.devicePixelRatio;
     visible: true;
     title:  qsTr("Calculate print cost")
+    property real material_amount_length: manager.materialAmountLength == -1 ? 0 : manager.materialAmountLength
+    property real pi: 3.1415 
+    property real material_radius:  0.5 * manager.materialDiameter
+    property real material_amount_volume:  pi * material_radius * material_radius * material_amount_length / 1000000 
+    property real density: manager.density
+    property real kg_material: material_amount_volume * density
+    property real price_per_kg : manager.pricePerKg 
    
     Column
     {
         anchors.fill: parent;
-
-        Text
-        { 
-            text: manager.materialAmount == -1 ? 0 : manager.materialAmount
-            onTextChanged: 
+        Row
+        {
+            Text 
             {
-                price_text.text = "Price: " + manager.materialAmount * cost_field.text
+                text: "Density: "
+            }
+            TextField 
+            { 
+                id: density_field
+                text: density
+                onAccepted: 
+                {
+                    manager.setDensity(density_field.text)
+                }
             }
         }
-        TextField 
-        { 
-            id: cost_field
-            text: "12"
-            onAccepted: 
+        Row 
+        {
+            Text 
             {
-                price_text.text = "Price: " + manager.materialAmount * cost_field.text
+                text: "Cost per kg: "
             }
+            TextField 
+            { 
+                id: cost_field
+                text: price_per_kg
+                onAccepted: 
+                {
+                    manager.setPricePerKG(cost_field.text)
+                }
+            }
+        }
+        Text
+        {
+            text: "Weight of print " + kg_material + " kg"
         }
         
         Text
         {
-            id: price_text
-            text: "Price:"
+            text: "Print cost: " + price_per_kg * kg_material
         }
+        
  
         Button
         {
