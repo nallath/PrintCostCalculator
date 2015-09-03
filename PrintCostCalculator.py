@@ -18,10 +18,12 @@ class PrintCostCalculator(QObject,  Extension):
         self._cost_view = None 
        
         self.addMenuItem(i18n_catalog.i18n("Calculate"), self.showPopup)
-        
+
+        self._engine_created = False
         # We need to listen for active machine changed, as this might change the material _material_diameter
-        Application.getInstance().activeMachineChanged.connect(self._onActiveMachineChanged)
-        
+        Application.getInstance().engineCreatedSignal.connect(self._onEngineCreated)
+        Application.getInstance().getMachineManager().activeMachineInstanceChanged.connect(self._onActiveMachineChanged)
+
         self._print_information = None
         self._material_diameter = 2.85
         
@@ -41,20 +43,23 @@ class PrintCostCalculator(QObject,  Extension):
     densityChanged = pyqtSignal()
     pricePerKgChanged = pyqtSignal()
     
+    def _onEngineCreated(self):
+        self._engine_created = True
+        self._onActiveMachineChanged()
+
     ##  Private function to sit in between uranium signal and pyqt signal.
     def _onMaterialDiameterChanged(self, value):
         self._material_diameter = value 
         self.materialDiameterChanged.emit()
-    
+
     def _onActiveMachineChanged(self):
-        self._print_information = Application.getInstance()._print_information  #Yes, this is bad. There are no getter/setter :(
-        self._print_information.materialAmountChanged.connect(self.materialAmountChanged)
-        
-        self._settings = Application.getInstance().getActiveMachine()
-        if self._settings:
-            material_diameter = self._settings.getSettingByKey("material_diameter")
+        if self._engine_created:
+            self._print_information = Application.getInstance().getPrintInformation()
+            self._print_information.materialAmountChanged.connect(self.materialAmountChanged)
+            self._profile = Application.getInstance().getMachineManager().getActiveProfile()
+            material_diameter = self._profile.getSettingValue("material_diameter")
             if material_diameter:
-                material_diameter.valueChanged.connect(self._onMaterialDiameterChanged)
+                self._onMaterialDiameterChanged(material_diameter)
 
     @pyqtProperty(float, notify = materialAmountChanged)
     def materialAmountLength(self):
