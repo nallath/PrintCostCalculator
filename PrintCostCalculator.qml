@@ -9,6 +9,7 @@ import UM 1.0 as UM
 
 UM.Dialog
 {
+    modality: Qt.NonModal
     id: base;
     width: 250 * Screen.devicePixelRatio;
     height: 110 * Screen.devicePixelRatio;
