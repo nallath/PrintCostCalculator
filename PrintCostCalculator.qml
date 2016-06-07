@@ -35,7 +35,7 @@ UM.Dialog
             { 
                 id: density_field
                 text: density
-                onAccepted: 
+                Keys.onReleased:
                 {
                     manager.setDensity(density_field.text)
                 }
@@ -51,7 +51,7 @@ UM.Dialog
             { 
                 id: cost_field
                 text: price_per_kg
-                onAccepted: 
+                Keys.onReleased:
                 {
                     manager.setPricePerKG(cost_field.text)
                 }

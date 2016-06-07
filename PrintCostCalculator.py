@@ -57,7 +57,7 @@ class PrintCostCalculator(QObject,  Extension):
             self._print_information = Application.getInstance().getPrintInformation()
             self._print_information.materialAmountChanged.connect(self.materialAmountChanged)
             self._profile = Application.getInstance().getMachineManager().getActiveProfile()
-	    if self._profile:
+            if self._profile:
                 material_diameter = self._profile.getSettingValue("material_diameter")
                 if material_diameter:
                     self._onMaterialDiameterChanged(material_diameter)
@@ -102,3 +102,4 @@ class PrintCostCalculator(QObject,  Extension):
         if self._cost_view is None:
             self._createCostView()
         self._cost_view.show()
+
