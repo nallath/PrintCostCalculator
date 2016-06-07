@@ -57,9 +57,10 @@ class PrintCostCalculator(QObject,  Extension):
             self._print_information = Application.getInstance().getPrintInformation()
             self._print_information.materialAmountChanged.connect(self.materialAmountChanged)
             self._profile = Application.getInstance().getMachineManager().getActiveProfile()
-            material_diameter = self._profile.getSettingValue("material_diameter")
-            if material_diameter:
-                self._onMaterialDiameterChanged(material_diameter)
+	    if self._profile:
+                material_diameter = self._profile.getSettingValue("material_diameter")
+                if material_diameter:
+                    self._onMaterialDiameterChanged(material_diameter)
 
     @pyqtProperty(float, notify = materialAmountChanged)
     def materialAmountLength(self):
