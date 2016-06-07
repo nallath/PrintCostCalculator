@@ -11,7 +11,7 @@ def getMetaData():
         {
             "name": "Print Cost Calculator",
             "author": "Jaime van Kessel",
-            "version": "15.06",
+            "version": "2.1",
             "api": 2,
             "description": i18n_catalog.i18nc("Description of plugin","Extension to quickly calculate print costs")
         }
